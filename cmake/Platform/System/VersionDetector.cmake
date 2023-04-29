@@ -67,18 +67,19 @@ function(detect_sdk_version)
         message(FATAL_ERROR "Version file is found but its empty")
     endif ()
 
-    string(REPLACE "." ";" split_version ${raw_version})
+    string(REPLACE "+" "." raw_split_version ${raw_version})
+    string(REPLACE "." ";" split_version ${raw_split_version})
     list(GET split_version 0 split_version_major)
     list(GET split_version 1 split_version_minor)
     list(GET split_version 2 split_version_patch)
 
-    set(ARDUINO_CMAKE_SDK_VERSION "${raw_version}" CACHE STRING "Arduino SDK Version")
     set(ARDUINO_CMAKE_SDK_VERSION_MAJOR ${split_version_major} CACHE STRING
             "Arduino SDK Major Version")
     set(ARDUINO_CMAKE_SDK_VERSION_MINOR ${split_version_minor} CACHE STRING
             "Arduino SDK Minor Version")
     set(ARDUINO_CMAKE_SDK_VERSION_PATCH ${split_version_patch} CACHE STRING
             "Arduino SDK Patch Version")
+    set(ARDUINO_CMAKE_SDK_VERSION "${ARDUINO_CMAKE_SDK_VERSION_MAJOR}.${ARDUINO_CMAKE_SDK_VERSION_MINOR}.${ARDUINO_CMAKE_SDK_VERSION_PATCH}")
 
     if (ARDUINO_CMAKE_SDK_VERSION VERSION_LESS 1.6.0)
         message(FATAL_ERROR "Unsupported Arduino SDK (requires version 1.6 or higher)")
